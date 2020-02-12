@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>vue Todo</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Todo App</h1>
+      <input type="text" v-model="inputText" v-on:keyup.enter="addItem" />
+      <button v-on:click="fetchItem">add</button>
+      <!-- <div>{{todoItems}}</div> -->
+      <ul>
+        <li v-for="(todoItem,index) in todoItems">
+          {{ todoItem }}
+          <button v-on:click="removeItem(todoItem,index)">remove</button>
+        </li>
+      </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          inputText: "",
+          todoItems: []
+        },
+        created: function() {
+          this.fetchItem();
+        },
+        methods: {
+          removeItem: function(todoItem, index) {
+            //   axios.delete('todos/'+index)
+            console.log(todoItem, index);
+            this.todoItems.splice(index, 1);
+            localStorage.removeItem(todoItem);
+          },
+          addItem: function(event) {
+            console.log(event);
+            var value = this.inputText;
+            localStorage.setItem(value, value);
+            this.inputText = "";
+            this.todoItems.push(value);
+            //if(event.keyCode === 13){
+            //}
+            //   type: "POST"
+            // });
+            // axioc.post("주소", this.inputText);
+          },
+          fetchItem: function() {
+            // axios.get('/todos')
+            for (var i = 0; i < localStorage.length; i++) {
+              var value = localStorage.key(i);
+              console.log(value);
+              this.todoItems.push(value);
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
